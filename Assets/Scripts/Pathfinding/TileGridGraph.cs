@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class TileGridGraph : MonoBehaviour {
     public GameObject nodePrefab;
@@ -40,6 +41,8 @@ public class TileGridGraph : MonoBehaviour {
             Vector3 position = new Vector3(xPosition, 0.5f, yPosition);
             GameObject node = Instantiate(nodePrefab, position, Quaternion.identity);
             nodes[x, y] = node.GetComponent<Node>();
+            nodes[x, y].x = x;
+            nodes[x, y].y = y;
         }
     }
 
@@ -50,6 +53,14 @@ public class TileGridGraph : MonoBehaviour {
             for (int y = 0; y < NODE_COUNT_Y; y++) {
                 FindAllConnectedNeighbors(x, y);
             }
+        }
+
+        AStar aStar = new AStar();
+        aStar.ComputePath(nodes[0,0], nodes[9,19]);
+        List<Node> path = aStar.GetFoundPath();
+        for (int i = 0; i < path.Count; i++) {
+            if (i == (path.Count - 1)) { break; }
+            Debug.DrawLine(path[i].coord.toXZ(0.5f), path[i + 1].coord.toXZ(0.5f), Color.red, 100f);
         }
             
         ranChecks = true;
