@@ -50,8 +50,6 @@ public class TileGridGraph : MonoBehaviour {
             Vector3 position = new Vector3(xPosition, 0.5f, yPosition);
             GameObject node = Instantiate(nodePrefab, position, Quaternion.identity);
             nodes[x, y] = node.GetComponent<Node>();
-            nodes[x, y].x = x;
-            nodes[x, y].y = y;
         }
     }
 
