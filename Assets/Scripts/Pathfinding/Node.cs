@@ -3,21 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour {
+    public Cluster.ClusterType clusterType;
+
     public Vector2 coord { get; private set; }
-    
+
     public int x;
     public int y;
-    
+
     public List<Node> neighbors {
         get;
-    } = new List<Node>();
+        private set;
+    }
 
-    private void Start() {
+    private void Awake() {
+        clusterType = Cluster.ClusterType.Hallway1;
         coord = transform.position.XZ();
+        neighbors = new List<Node>();
     }
 
     private void OnCollisionEnter(Collision other) {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        switch (other.name) {
+            case "Cluster1":
+                clusterType = Cluster.ClusterType.Cluster1;
+                break;
+            case "Cluster2":
+                clusterType = Cluster.ClusterType.Cluster2;
+                break;
+            case "Cluster3":
+                clusterType = Cluster.ClusterType.Cluster3;
+                break;
+        }
     }
 
     public float Cost(Node other) {

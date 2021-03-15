@@ -56,7 +56,7 @@ public class TileGridGraph : MonoBehaviour {
         }
 
         AStar aStar = new AStar();
-        aStar.ComputePath(nodes[0,0], nodes[9,19]);
+        aStar.ComputePath(nodes[0,0], nodes[6,10]);
         List<Node> path = aStar.GetFoundPath();
         for (int i = 0; i < path.Count; i++) {
             if (i == (path.Count - 1)) { break; }

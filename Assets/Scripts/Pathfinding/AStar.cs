@@ -29,6 +29,7 @@ public class AStar {
 
             
             foreach (Node neighbor in current.neighbors) {
+                Debug.DrawLine(current.coord.toXZ(0.5f), neighbor.coord.toXZ(0.5f), Color.yellow, 100f);
                 float newCost = costSoFar[current] + current.Cost(neighbor);
 
                 // Add new cost if node hasn't been traversed or is smaller than a previous trip to that node.
@@ -60,6 +61,7 @@ public class AStar {
             current = cameFrom[current];
         }
 
+        path.Add(start);
         path.Reverse();
         return path;
     }
