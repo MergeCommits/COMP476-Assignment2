@@ -4,8 +4,8 @@ using System.Linq;
 using UnityEngine;
 
 public class POVGraph : MonoBehaviour {
-    public GameObject nodePrefab;
-
+    public bool disable;
+    
     private Node[] nodes;
 
     private Cluster cluster1 = new Cluster();
@@ -16,7 +16,8 @@ public class POVGraph : MonoBehaviour {
     private Cluster hallway3 = new Cluster();
     private Cluster hallway4 = new Cluster();
 
-    private bool ranChecks;
+    [NonSerialized]
+    public bool ranChecks;
 
     private void Start() {
         GameObject collectionOfNodes = GameObject.Find("PoV Nodes");
@@ -63,18 +64,22 @@ public class POVGraph : MonoBehaviour {
             FindAllConnectedNeighbors(node);
         }
 
-        GenerateGridAndPath(new ClusterHeuristic());
-            
+        if (disable) {
+            GenerateGridAndPath(new ClusterHeuristic(), nodes[46], nodes[7]);
+        }
+
         ranChecks = true;
     }
 
-    private void GenerateGridAndPath(AStar pathfindingAlgorithm) {
-        pathfindingAlgorithm.ComputePath(nodes[0], nodes[8]);
+    public List<Node> GenerateGridAndPath(AStar pathfindingAlgorithm, Node start, Node goal) {
+        pathfindingAlgorithm.ComputePath(start, goal);
         List<Node> path = pathfindingAlgorithm.GetFoundPath();
         for (int i = 0; i < path.Count; i++) {
             if (i == (path.Count - 1)) { break; }
             Debug.DrawLine(path[i].coord.toXZ(0.5f), path[i + 1].coord.toXZ(0.5f), Color.red, 100f);
         }
+
+        return path;
     }
 
     private void FindAllConnectedNeighbors(Node node) {
