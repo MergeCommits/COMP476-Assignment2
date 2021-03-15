@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public class PriorityQueue<T> {
     private readonly List<KeyValuePair<T, float>> elements = new List<KeyValuePair<T, float>>();
 
-    public int Count {
+    public int count {
         get { return elements.Count; }
     }
 

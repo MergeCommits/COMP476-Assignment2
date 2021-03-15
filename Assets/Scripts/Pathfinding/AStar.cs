@@ -22,7 +22,7 @@ public class AStar {
         cameFrom.Add(start, start);
         costSoFar.Add(start, 0f);
 
-        while (frontier.Count > 0f) {
+        while (frontier.count > 0f) {
             Node current = frontier.Dequeue();
 
             if (current.Equals(goal)) { break; }
