@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TileGridGraph : MonoBehaviour {
+    public bool disable;
     public GameObject nodePrefab;
 
     private readonly Vector2 startPoint = new Vector2(-9.41f, -9.17f);
@@ -12,7 +13,7 @@ public class TileGridGraph : MonoBehaviour {
     private const int NODE_COUNT_Y = 20;
     private float TOTAL_NODE_COUNT { get { return NODE_COUNT_Y * NODE_COUNT_X; } }
 
-    private readonly Node[,] nodes = new Node[NODE_COUNT_X, NODE_COUNT_Y];
+    public readonly Node[,] nodes = new Node[NODE_COUNT_X, NODE_COUNT_Y];
 
     private Cluster cluster1 = new Cluster();
     private Cluster cluster2 = new Cluster();
@@ -34,7 +35,8 @@ public class TileGridGraph : MonoBehaviour {
         return nodes[x, y];
     }
 
-    private bool ranChecks;
+    [NonSerialized]
+    public bool ranChecks;
 
     private void Start() {
         float xLength = (endPoint.x - startPoint.x) / NODE_COUNT_X;
@@ -96,19 +98,23 @@ public class TileGridGraph : MonoBehaviour {
                 FindAllConnectedNeighbors(x, y);
             }
         }
-
-        GenerateGridAndPath(new ClusterHeuristic());
+        
+        if (disable) {
+            GenerateGridAndPath(new ClusterHeuristic(), nodes[0,0], nodes[8,11]);
+        }
             
         ranChecks = true;
     }
 
-    private void GenerateGridAndPath(AStar pathfindingAlgorithm) {
-        pathfindingAlgorithm.ComputePath(nodes[0,0], nodes[8,11]);
+    public List<Node> GenerateGridAndPath(AStar pathfindingAlgorithm, Node start, Node goal) {
+        pathfindingAlgorithm.ComputePath(start, goal);
         List<Node> path = pathfindingAlgorithm.GetFoundPath();
         for (int i = 0; i < path.Count; i++) {
             if (i == (path.Count - 1)) { break; }
             Debug.DrawLine(path[i].coord.toXZ(0.5f), path[i + 1].coord.toXZ(0.5f), Color.red, 100f);
         }
+
+        return path;
     }
 
     private void FindAllConnectedNeighbors(int x, int y) {

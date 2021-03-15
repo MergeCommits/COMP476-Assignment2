@@ -22,10 +22,10 @@ public class Follower : MonoBehaviour {
     public float orientation;
     public float rotation;
     public float angularAcceleration;
-    [NonSerialized] public float maxVelocity = 5f;
-    [NonSerialized] public float maxRotation = 5f;
-    [NonSerialized] public float maxAcceleration = 25f;
-    [NonSerialized] public float maxAngularAcceleration = 15f;
+    [NonSerialized] public float maxVelocity = 4f;
+    [NonSerialized] public float maxRotation = 4f;
+    [NonSerialized] public float maxAcceleration = 35f;
+    [NonSerialized] public float maxAngularAcceleration = 20f;
 
     private Steering currentBehavior = new Steering();
     public Follower followerTarget { private set; get; }
@@ -64,12 +64,18 @@ public class Follower : MonoBehaviour {
                         }
                         path = povGraph.GenerateGridAndPath(new ClusterHeuristic(), start, end);
                         target = path[0].gameObject;
+                    } else {
+                        if (!tileGridGraph.ranChecks) {
+                            break;
+                        }
+                        path = tileGridGraph.GenerateGridAndPath(new ClusterHeuristic(), tileGridGraph.nodes[0,0], tileGridGraph.nodes[7,19]);
+                        target = path[0].gameObject;
                     }
 
                     computedPath = true;
                 }
                 
-                if (Vector2.Distance(position, target.transform.position.XZ()) < 0.4f) {
+                if (Vector2.Distance(position, target.transform.position.XZ()) < 0.8f) {
                     if (target == path.Last().gameObject) {
                         currentState = State.Frozen;
                         break;
